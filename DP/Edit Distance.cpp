@@ -4,14 +4,19 @@ using namespace std;
 int dp[100][100];
 int i, j;
 
-int edit_distance(string s1, string s2, int l1, int l2)
+int edit_distance(string source, string destination, int l1, int l2)
 {
     for(i=0; i<=l1; i++){
         for(j=0; j<=l2; j++){
+            // if source is empty then insert all characters of destination
             if(i==0) dp[i][j] = j;
+            // if destination is empty then delete all characters of destination
             else if(j==0) dp[i][j] = i;
-            if(s1[i-1] == s2[j-1]) dp[i][j] = dp[i-1][j-1];
-            else if (s1[i-1] != s2[j-1]) dp[i][j] = 1+min(min(dp[i][j-1], dp[i-1][j]), dp[i-1][j-1]);
+            /* dp[][] will be diagonal value coz no need to convert same char
+            diagonal value means edit distance for edit distance without that char */
+            if(source[i-1] == destination[j-1]) dp[i][j] = dp[i-1][j-1];
+            // consider all possibilities and take min
+            else if (source[i-1] != destination[j-1]) dp[i][j] = 1+min(min(dp[i][j-1], dp[i-1][j]), dp[i-1][j-1]);
         }
     }
     return dp[l1][l2];
